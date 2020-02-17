@@ -1,9 +1,10 @@
 /*
 =============================================
 ; Title:  Exercise 1.3
-; Author: Emily Richter
+; Author: Professor Krasso
 ; Date:   17 February 2020
-; Description: Modules - URL parsing
+; Modified By: Emily Richter
+; Description: Demonstrates how to parse a Node.js URL
 ;============================================
 */
 
