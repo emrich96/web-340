@@ -1,6 +1,6 @@
 /*
 ============================================
-; Title:  Richter-Assignment2.2
+; Title:  Exercise 2.2
 ; Author: Emily Richter
 ; Date:   1 March 2020
 ; Description: Creates a new server and  listens
@@ -22,6 +22,8 @@ app.use(function(request, response){
   response.end("Hello World");
 });
 
-http.createServer(app).listen(8080);
+http.createServer(app).listen(808, function(){
+  console.log("Server listening on port 8080")
+});
 
 // End program
