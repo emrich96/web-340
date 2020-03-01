@@ -2,11 +2,13 @@
 ============================================
 ; Title:  Richter-Assignment2.2
 ; Author: Emily Richter
-; Date:   1 March 2019
+; Date:   1 March 2020
 ; Description: Creates a new server and  listens
 ;              on port 8080.
 ;===========================================
 */
+
+// Start program
 
 var express = require("express");
 
@@ -21,3 +23,5 @@ app.use(function(request, response){
 });
 
 http.createServer(app).listen(8080);
+
+// End program
