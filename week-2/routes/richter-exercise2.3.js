@@ -30,7 +30,7 @@ app.get("/contact", function(request, response) {
 app.use(function(request, response) {
   response.statusCode = 404;
 
-  response.end("404!";)
+  response.end("404!");
 });
 
 http.createServer(app).listen(8080);
