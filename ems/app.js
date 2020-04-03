@@ -45,6 +45,12 @@ app.get("/", function(request, response) {
   });
 });
 
+// Model
+var employee = new Employee({
+  firstName: "Emily",
+  lastName: "Richter"
+})
+
 // Create new Node server and listens local on port 8080
 http.createServer(app).listen(8080, function() {
   console.log("Application started on port 8080!");
