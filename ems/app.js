@@ -16,6 +16,10 @@ var path = require("path");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 var Employee = require("./models/employee");
+var helmet = require("helmet");
+var bodyParser = require("body-parser");
+var cookieParser = require("cookie-parser");
+var csrf = require("csurf");
 
 // mLab connection
 var mongoDB = "mongodb+srv://emrich96:apassword0123@buwebdev-cluster-1-m6ctp.mongodb.net/test?retryWrites=true&w=majority";
@@ -29,27 +33,107 @@ db.once("open", function() {
   console.log("Application connected to mLab MongoDB instance");
 });
 
+// Setup csrf protection
+var csrfProtection = csrf({cookie: true});
+
 // Initialize application
 var app = express();
-
-// Set up views and view's directory path
-app.set("views", path.resolve(__dirname, "views"));
-app.set("view engine", "ejs");
 
 // Morgan logger
 app.use(logger("short"));
 
-app.get("/", function(request, response) {
-  response.render("index", {
-    title: "Home page"
+// Helmet
+app.use(helmet.xssFilter());
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
+app.use(csrfProtection);
+
+app.use(function(request, response, next) {
+  var token = request.csrfToken();
+  response.cookie('XSRF-TOKEN', token);
+  response.locals.csrfToken = token;
+  next();
+});
+
+// Set up views and view's directory path
+app.set("views", path.resolve(__dirname, "views"));
+app.set("view engine", "ejs");
+app.set('port', process.env.PORT || 8080);
+
+/**
+ * Description: Redirects users to the 'index' page.
+ * Type: HttpGet
+ * Request: n/a
+ * Response: index.ejs, Employee[]
+ * URL: localhost:8080
+ */
+app.get("/", function (request, response) {
+  Employee.find({}, function (err, employees) {
+    if (err) {
+      console.log(err);
+      throw err;
+    } else {
+      console.log(employees);
+      response.render('index', {
+        title: 'EMS Home',
+        employees: employees
+      })
+    }
   });
 });
 
-// Model test
-var employee = new Employee({
-  firstName: "Emily",
-  lastName: "Richter"
+/**
+ * Description: Redirects users to the 'new' page.
+ * Type: HttpGet
+ * Request: n/a
+ * Response: new.ejs
+ * URL: localhost:8080/new
+ */
+app.get("/new", function(request, response) {
+  response.render("new", {
+    title: 'EMS | New'
+  });
 });
+
+
+/**
+ * Description: Processes a form submission.
+ * Type: HttpPost
+ * Request: textName
+ * Response: index.ejs
+ * URL: localhost:8080/process
+ */
+app.post('/process', function(req, res) {
+  // console.log(request.body.txtName);
+  console.log(`${req.body.txtFirstName} + ${req.body.txtLastName}`);
+  if (!req.body.txtFirstName || !req.body.txtLastName) {
+    res.status(400).send('Entries must have both names filled out.');
+    return;
+  }
+
+  // get the request's form data
+  const newFirstName = req.body.txtFirstName;
+  const newLastName = req.body.txtLastName;
+
+  // create a Employee model
+  let employee = new Employee({
+    firstName: employeeFirstName,
+    lastName: employeeLastName
+  });
+
+  // save
+  employee.save(function(err) {
+    if (err) {
+      console.log(err);
+      throw err;
+    } else {
+      console.log(employeeName + ' saved successfully!');
+      res.redirect('/');
+    }
+  });
+});
+
 
 // Create new Node server and listens local on port 8080
 http.createServer(app).listen(8080, function() {
