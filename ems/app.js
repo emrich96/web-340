@@ -96,7 +96,6 @@ app.get("/new", function(request, response) {
   });
 });
 
-
 /**
  * Description: Processes a form submission.
  * Type: HttpPost
@@ -132,6 +131,35 @@ app.post('/process', function(req, res) {
       res.redirect('/');
     }
   });
+});
+
+/**
+ * Description: Redirects users to the 'home' page'
+ * Type: HttpGet
+ * Request: queryName
+ * Response: view.ejs, Fruit[] | index.ejs
+ * URL: localhost:8080/view/:queryName
+ */
+app.get('/view/:queryName', function(req, res) {
+  const queryName = req.params['queryName'];
+
+  Employee.find({'lastName': queryName}, function(err, employees) {
+    if (err) {
+      console.log(err);
+      throw err;
+    } else {
+      console.log(employees);
+
+      if (employees.length > 0) {
+        res.render('view', {
+          title: 'EMS | View',
+          employee: employees
+        })
+      } else {
+        res.redirect('/');
+      }
+    }
+  })
 });
 
 
