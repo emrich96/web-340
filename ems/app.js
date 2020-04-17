@@ -118,8 +118,8 @@ app.post('/process', function(req, res) {
 
   // create a Employee model
   let employee = new Employee({
-    firstName: employeeFirstName,
-    lastName: employeeLastName
+    firstName: newFirstName,
+    lastName: newLastName
   });
 
   // save
@@ -128,7 +128,7 @@ app.post('/process', function(req, res) {
       console.log(err);
       throw err;
     } else {
-      console.log(employeeName + ' saved successfully!');
+      console.log(newFirstName + " " + newLastName + ' saved successfully!');
       res.redirect('/');
     }
   });
