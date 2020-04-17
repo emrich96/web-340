@@ -99,7 +99,7 @@ app.get("/new", function(request, response) {
 /**
  * Description: Processes a form submission.
  * Type: HttpPost
- * Request: textName
+ * Request: textFirstName and txtLastName
  * Response: index.ejs
  * URL: localhost:8080/process
  */
@@ -137,7 +137,7 @@ app.post('/process', function(req, res) {
  * Description: Redirects users to the 'home' page'
  * Type: HttpGet
  * Request: queryName
- * Response: view.ejs, Fruit[] | index.ejs
+ * Response: view.ejs, Employee[] | index.ejs
  * URL: localhost:8080/view/:queryName
  */
 app.get('/view/:queryName', function(req, res) {
