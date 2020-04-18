@@ -76,7 +76,7 @@ app.get("/", function (request, response) {
     } else {
       console.log(employees);
       response.render('index', {
-        title: 'EMS Home',
+        title: 'EMS | Home',
         employees: employees
       })
     }
